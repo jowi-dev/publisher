@@ -11,15 +11,17 @@
       systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
       perSystem = { config, self', inputs', pkgs, system, ... }:
         let
-          packageName = "PACKAGENAME";
+          packageName = "emporium";
           docPath="";
           basePackages = with pkgs; [
+            beam.interpreters.elixir
             elixir 
             erlang_27
           ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [inotify-tools] ;
 
             
           hooks = ''
+            echo "HELLO WORLD"
             # this allows mix to work on the local directory
             mkdir -p .nix-mix .nix-hex
             export MIX_HOME=$PWD/.nix-mix
@@ -44,6 +46,7 @@
             # run tests?
             doCheck=false;
             packages=basePackages;
+            buildInputs = basePackages;
             buildPhase = ''
               ${hooks}
               mix deps.get
@@ -53,8 +56,8 @@
               #/etc/profiles/per-user/$USER/share/doc/${packageName}/md/
               mkdir -p $out/bin
               mkdir -p $out/${docPath}
-              mv ${packageName} $out/bin
-              mv docs/* $out/${docPath}
+              mv ${packageName} $out/bin/${packageName}
+              #mv docs/* $out/${docPath}
             '';
           };
         };
