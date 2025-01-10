@@ -78,15 +78,14 @@ defmodule AbstractEmporium.Blog do
   def generate_site(output_dir) do
     root = "/Users/jowi/Projects/abstract_emporium/"<> output_dir 
     # Generate individual post pages
+    IO.inspect(all_posts(), limit: :infinity, pretty: true, label: "")
     for post <- all_posts() do
-      path = Path.join([root, "posts", "#{post.id}.html"])
+      path = root <> "/posts/" <> "#{post.id}.html"
       content = render_post(post)
-      |> IO.inspect(limit: :infinity, pretty: true, label: "saving")
-      IO.inspect(path, limit: :infinity, pretty: true, label: "to")
       File.write!(path, content)
     end
 
     # Generate index page
-    File.write!(Path.join(root, "index.html"), render_index())
+    File.write!(root <> "/index.html", render_index())
   end
 end

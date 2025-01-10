@@ -4,6 +4,7 @@ defmodule AbstractEmporium do
   """
 
   def main(_args) do
-    AbstractEmporium.Blog.generate_site("_site")
+    AbstractEmporium.Blog.generate_site("site")
+    #System.cmd("mv", ["_build/dev/lib/abstract_emporium/_site/*", "site/"])
   end
 end
