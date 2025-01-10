@@ -1,12 +1,13 @@
 defmodule AbstractEmporium.Article do
-  @enforce_keys [:id, :author, :title, :body, :description, :tags, :date]
-  defstruct [:id, :author, :title, :body, :description, :tags, :date]
+  @enforce_keys [:id, :author, :title, :body ]
+  defstruct [:id, :author, :title, :body ]
+
+  @author "Joe Wiliams"
 
   def build(filename, attrs, body) do
-    [year, month_day_id] = filename |> Path.rootname() |> Path.split() |> Enum.take(-2)
-    [month, day, id] = String.split(month_day_id, "-", parts: 3)
-    date = Date.from_iso8601!("#{year}-#{month}-#{day}")
-    struct!(__MODULE__, [id: id, date: date, body: body] ++ Map.to_list(attrs))
+    file = Path.basename(filename)
+    [file, ""] = String.split(file, ".md")
+    struct!(__MODULE__, [id: file, author: @author, body: body] ++ Map.to_list(attrs))
     |> IO.inspect(limit: :infinity, pretty: true, label: "")
   end
 end

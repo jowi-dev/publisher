@@ -9,14 +9,19 @@ defmodule AbstractEmporium.Blog do
   # The @posts attribute is populated by NimblePublisher
   def all_posts, do: @posts
 
-  def all_tags, do: @tags
+  #def all_tags, do: @tags
 
-  def published_posts, do: Enum.filter(all_posts(), &(&1.date <= Date.utc_today()))
+  #def published_posts, do: Enum.filter(all_posts(), &(&1.date <= Date.utc_today()))
 
-  def posts_by_tag(tag), do: Enum.filter(all_posts(), &(tag in &1.tags))
+  #def posts_by_tag(tag), do: Enum.filter(all_posts(), &(tag in &1.tags))
 
   # Create HTML for a single post
   def render_post(post) do
+    #<p>Published on: #{Calendar.strftime(post.date, "%B %d, %Y")}</p>
+    #
+    #        <div class="tags">
+    #          Tags: #{Enum.join(post.tags, ", ")}
+    #        </div>
     """
     <!DOCTYPE html>
     <html>
@@ -27,10 +32,6 @@ defmodule AbstractEmporium.Blog do
     <body>
       <article>
         <h1>#{post.title}</h1>
-        <p>Published on: #{Calendar.strftime(post.date, "%B %d, %Y")}</p>
-        <div class="tags">
-          Tags: #{Enum.join(post.tags, ", ")}
-        </div>
         <div class="content">
           #{post.body}
         </div>
@@ -42,15 +43,15 @@ defmodule AbstractEmporium.Blog do
 
   # Create an index page with all posts
   def render_index do
-    posts = published_posts()
-    |> Enum.sort_by(& &1.date, {:desc, Date})
+    posts = all_posts()
+    #|> Enum.sort_by(& &1.date, {:desc, Date})
+    #<p>#{post.description}</p>
+    #<p>Published on: #{Calendar.strftime(post.date, "%B %d, %Y")}</p>
 
     post_links = Enum.map(posts, fn post ->
       """
       <li>
         <h2><a href="/posts/#{post.id}.html">#{post.title}</a></h2>
-        <p>#{post.description}</p>
-        <p>Published on: #{Calendar.strftime(post.date, "%B %d, %Y")}</p>
       </li>
       """
     end)
@@ -75,12 +76,13 @@ defmodule AbstractEmporium.Blog do
 
   # Generate all HTML files
   def generate_site(output_dir) do
-    File.mkdir_p!(output_dir)
-    File.mkdir_p!(Path.join(output_dir, "posts"))
+    root = Application.app_dir(:abstract_emporium, "output_dir")
+    File.mkdir_p!(root)
+    File.mkdir_p!(Path.join(root, "posts"))
 
     # Generate individual post pages
-    for post <- published_posts() do
-      path = Path.join([output_dir, "posts", "#{post.id}.html"])
+    for post <- all_posts() do
+      path = Path.join([root, "posts", "#{post.id}.html"])
       content = render_post(post)
       File.write!(path, content)
     end
