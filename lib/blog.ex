@@ -23,7 +23,7 @@ defmodule AbstractEmporium.Blog do
   end
   
   def all_posts do
-    read_posts("/Users/jowi/Projects/abstract_emporium/posts")
+    read_posts(get_log_path())
   end
 
   # Create HTML for a single post
@@ -82,8 +82,8 @@ defmodule AbstractEmporium.Blog do
   end
 
   # Generate all HTML files
-  def generate_site(output_dir) do
-    root = "/Users/jowi/Projects/abstract_emporium/"<> output_dir 
+  def generate_site() do
+    root = get_site_path()
     # Generate individual post pages
     Logger.info("#{inspect(all_posts())}")
     for post <- all_posts() do
@@ -96,4 +96,9 @@ defmodule AbstractEmporium.Blog do
     # Generate index page
     File.write!(root <> "/index.html", render_index())
   end
+
+  # This is a value that is generated and stored in our home manager config
+  defp get_log_path, do: System.get_env("LOG_DIR_PERSONAL")
+  # This is a value that is generated and stored in our home manager config
+  defp get_site_path, do: System.get_env("SITE_PERSONAL")
 end
