@@ -1,28 +1,33 @@
 defmodule AbstractEmporium.Blog do
   require Logger
 
-  use NimblePublisher,
-    build: AbstractEmporium.Article,
-    from: "/Users/jowi/Projects/abstract_emporium/priv/posts/ts_to_ex/*.md",
-    as: :posts,
-    highlighters: [:makeup_elixir]
-
-  # The @posts attribute is populated by NimblePublisher
-  def all_posts, do: @posts
-
-  #def all_tags, do: @tags
-
-  #def published_posts, do: Enum.filter(all_posts(), &(&1.date <= Date.utc_today()))
-
-  #def posts_by_tag(tag), do: Enum.filter(all_posts(), &(tag in &1.tags))
+  def read_posts(dir) do
+    Path.wildcard(Path.join(dir, "**/*.md"))
+    |> Enum.map(fn file ->
+      content = File.read!(file)
+      [frontmatter, markdown] = String.split(content, "---", parts: 2)
+      
+      # Parse frontmatter
+      {attrs, _} = Code.eval_string(frontmatter)
+      
+      # Convert markdown to HTML
+      html = Earmark.as_html!(markdown)
+      
+      # Build post struct similar to NimblePublisher
+      AbstractEmporium.Article.build(
+        Path.basename(file), 
+        attrs, 
+        html
+      )
+    end)
+  end
+  
+  def all_posts do
+    read_posts("/Users/jowi/Projects/abstract_emporium/posts")
+  end
 
   # Create HTML for a single post
   def render_post(post) do
-    #<p>Published on: #{Calendar.strftime(post.date, "%B %d, %Y")}</p>
-    #
-    #        <div class="tags">
-    #          Tags: #{Enum.join(post.tags, ", ")}
-    #        </div>
     """
     <!DOCTYPE html>
     <html>
@@ -40,6 +45,7 @@ defmodule AbstractEmporium.Blog do
     </body>
     </html>
     """
+    |> NimblePublisher.highlight()
   end
 
   # Create an index page with all posts
