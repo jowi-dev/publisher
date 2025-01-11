@@ -1,8 +1,9 @@
 defmodule AbstractEmporium.Blog do
+  require Logger
 
   use NimblePublisher,
     build: AbstractEmporium.Article,
-    from: Application.app_dir(:abstract_emporium, "priv/posts/**/*.md"),
+    from: "/Users/jowi/Projects/abstract_emporium/priv/posts/ts_to_ex/*.md",
     as: :posts,
     highlighters: [:makeup_elixir]
 
@@ -78,10 +79,11 @@ defmodule AbstractEmporium.Blog do
   def generate_site(output_dir) do
     root = "/Users/jowi/Projects/abstract_emporium/"<> output_dir 
     # Generate individual post pages
-    IO.inspect(all_posts(), limit: :infinity, pretty: true, label: "")
+    Logger.info("#{inspect(all_posts())}")
     for post <- all_posts() do
       path = root <> "/posts/" <> "#{post.id}.html"
       content = render_post(post)
+      Logger.info("rendering post to #{path}")
       File.write!(path, content)
     end
 
