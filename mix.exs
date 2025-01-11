@@ -5,7 +5,7 @@ defmodule AbstractEmporium.MixProject do
     [
       app: :abstract_emporium,
       version: "0.1.0",
-      elixir: "~> 1.18",
+      elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
       escript: [main_module: AbstractEmporium, name: "emporium", include_priv_for: [AbstractEmporium]],
       deps: deps()
