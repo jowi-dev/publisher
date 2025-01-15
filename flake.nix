@@ -21,7 +21,6 @@
 
             
           hooks = ''
-            echo "HELLO WORLD"
             # this allows mix to work on the local directory
             mkdir -p .nix-mix .nix-hex
             export MIX_HOME=$PWD/.nix-mix
@@ -53,11 +52,9 @@
               mix escript.build
             '';
             installPhase = ''
-              #/etc/profiles/per-user/$USER/share/doc/${packageName}/md/
               mkdir -p $out/bin
               mkdir -p $out/${docPath}
               mv ${packageName} $out/bin/${packageName}
-              #mv docs/* $out/${docPath}
             '';
           };
         };
