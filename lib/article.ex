@@ -1,4 +1,4 @@
-defmodule AbstractEmporium.Article do
+defmodule Publisher.Article do
   @enforce_keys [:id, :author, :title, :body ]
   defstruct [:id, :author, :title, :body ]
 

@@ -1,4 +1,4 @@
-defmodule AbstractEmporium.Blog do
+defmodule Publisher.Blog do
   require Logger
 
   def read_posts(dir) do
@@ -14,7 +14,7 @@ defmodule AbstractEmporium.Blog do
       html = Earmark.as_html!(markdown)
       
       # Build post struct similar to NimblePublisher
-      AbstractEmporium.Article.build(
+      Publisher.Article.build(
         Path.basename(file), 
         attrs, 
         html

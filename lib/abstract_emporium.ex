@@ -1,9 +1,9 @@
-defmodule AbstractEmporium do
+defmodule Publisher do
   @moduledoc """
-  Documentation for `AbstractEmporium`.
+  Documentation for `Publisher`.
   """
 
   def main(_args) do
-    AbstractEmporium.Blog.generate_site()
+    Publisher.Blog.generate_site()
   end
 end

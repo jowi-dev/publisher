@@ -1,13 +1,13 @@
-defmodule AbstractEmporium.MixProject do
+defmodule Publisher.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :abstract_emporium,
+      app: :publisher,
       version: "0.1.0",
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
-      escript: [main_module: AbstractEmporium, name: "emporium", include_priv_for: [AbstractEmporium]],
+      escript: [main_module: Publisher, name: "emporium", include_priv_for: [Publisher]],
       deps: deps()
     ]
   end
@@ -25,8 +25,6 @@ defmodule AbstractEmporium.MixProject do
       {:nimble_publisher, "~> 1.0"},
       {:makeup_elixir, ">= 0.0.0"},
       {:makeup_erlang, ">= 0.0.0"}
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
   end
 end
