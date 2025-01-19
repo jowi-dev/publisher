@@ -34,8 +34,7 @@ defmodule Publisher.MixProject do
 
   defp package do
     [
-      files: ~w(lib priv .formatter.exs mix.exs README* LICENSE*
-                license* CHANGELOG* changelog* src),
+      files: ~w(lib priv .formatter.exs mix.exs README* LICENSE*),
       licenses: ["Apache-2.0"],
       links: %{"GitHub" => "https://github.com/jowi-dev/publisher"}
     ]
