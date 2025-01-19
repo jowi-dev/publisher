@@ -1,6 +1,0 @@
-[submodule "priv/posts"]
-	path = posts
-	url = git@github.com:jowi-dev/logs_external.git
-[submodule "site"]
-	path = site
-	url = git@github.com:jowi-dev/jowi-dev.github.io.git

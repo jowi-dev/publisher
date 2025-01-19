@@ -98,7 +98,7 @@ defmodule Publisher.Blog do
   end
 
   # This is a value that is generated and stored in our home manager config
-  defp get_log_path, do: System.get_env("LOG_DIR_PERSONAL")
+  defp get_log_path, do: Application.get_env(Publisher, :log_path) || System.get_env("LOG_DIR_PERSONAL")
   # This is a value that is generated and stored in our home manager config
-  defp get_site_path, do: System.get_env("SITE_PERSONAL")
+  defp get_site_path, do: Application.get_env(Publisher, :output_path) || System.get_env("SITE_PERSONAL")
 end
