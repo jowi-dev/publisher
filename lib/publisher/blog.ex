@@ -38,7 +38,7 @@ defmodule Publisher.Blog do
     for post <- posts do
       path = root <> "/posts/" <> "#{post.id}.html"
       content = Html.render_post(post)
-      Logger.info("rendering post to #{path}")
+      Logger.info("rendering post to #{post.path}")
       File.write!(path, content)
     end
 
