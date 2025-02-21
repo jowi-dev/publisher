@@ -19,9 +19,7 @@
             erlang_27
             cacert
           ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [inotify-tools] ;
-            SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-            NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-            GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+
             
           hooks = ''
             # this allows mix to work on the local directory
@@ -50,8 +48,17 @@
             doCheck=false;
             packages=basePackages;
             nativeBuildInputs = with pkgs; [ pkg-config cacert ];
+
+            # Set these environment variables
+            SYSTEM_CERTIFICATE_PATH = "${pkgs.cacert}/etc/ssl/certs";
+            SYSTEM_CERTIFICATE_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+            SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+            NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+            GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+
             buildInputs = basePackages;
             buildPhase = ''
+export ERL_SSL_PATH="${pkgs.cacert}/etc/ssl/certs"
                   export SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
     export NIX_SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
     export GIT_SSL_CAINFO="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
