@@ -57,6 +57,13 @@
             GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
             buildInputs = basePackages;
+preBuildPhase = ''
+  # Copy system certificates to build environment
+  cp -L ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt ./cacert.pem
+  export ELIXIR_ERL_DIST_CERTS_PATH=$PWD
+  export ELIXIR_ERL_SSL_PATH=$PWD
+  export ELIXIR_CERTS_PATH=$PWD/cacert.pem
+'';
             buildPhase = ''
     # Create required directories
     mkdir -p .nix-mix .nix-hex
