@@ -11,7 +11,7 @@ defmodule Publisher.MixProject do
       start_permanent: Mix.env() == :prod,
       escript: [main_module: Publisher, name: "emporium", include_priv_for: [Publisher]],
       deps: deps(),
-      source: "https://github.com/elixir-ecto/postgrex"
+      source: "https://github.com/jowi-dev/publisher"
     ]
   end
 
