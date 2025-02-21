@@ -17,6 +17,7 @@
             beam.interpreters.elixir
             elixir 
             erlang_27
+            cacert
           ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [inotify-tools] ;
 
             
@@ -26,6 +27,7 @@
             export MIX_HOME=$PWD/.nix-mix
             export HEX_HOME=$PWD/.nix-hex
             export PATH=$MIX_HOME/bin:$MIX_HOME/escripts:$HEX_HOME/bin:$PATH
+            export NIX_SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
 
             mix local.hex --if-missing
             export LANG=en_US.UTF-8
