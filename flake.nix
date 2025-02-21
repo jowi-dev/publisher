@@ -40,56 +40,15 @@
             shellHook = hooks;
           };
 
-          packages.default = pkgs.stdenv.mkDerivation {
-            pname = "${packageName}";
-            version = "0.0.0";
-            src = ./.;
-            # run tests?
-            doCheck=false;
-            packages=basePackages;
-            nativeBuildInputs = with pkgs; [ pkg-config cacert ];
+          packages.default = pkgs.mixRelease {
 
-            # Set these environment variables
-            SYSTEM_CERTIFICATE_PATH = "${pkgs.cacert}/etc/ssl/certs";
-            SYSTEM_CERTIFICATE_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-            SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-            NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-            GIT_SSL_CAINFO = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+            postBuild = ''
 
-            buildInputs = basePackages;
-preBuildPhase = ''
-  # Copy system certificates to build environment
-  cp -L ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt ./cacert.pem
-  export ELIXIR_ERL_DIST_CERTS_PATH=$PWD
-  export ELIXIR_ERL_SSL_PATH=$PWD
-  export ELIXIR_CERTS_PATH=$PWD/cacert.pem
-'';
-            buildPhase = ''
-    # Create required directories
-    mkdir -p .nix-mix .nix-hex
-    
-    # Set up certificate environment for Erlang/Elixir
-    export MIX_HOME=$PWD/.nix-mix
-    export HEX_HOME=$PWD/.nix-hex
-    export PATH=$MIX_HOME/bin:$MIX_HOME/escripts:$HEX_HOME/bin:$PATH
-    
-    # Critical: Set Erlang SSL environment variables
-    export ELIXIR_ERL_OPTIONS="+c true +K true +P 134217727"
-    export ERL_FLAGS="-ssl ca_file ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
-    
-    # Set explicit certificate paths
-    cp -L ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt $PWD/cacerts.pem
-    export SSL_CERT_FILE=$PWD/cacerts.pem
-    export ERL_SSL_CA_FILE=$PWD/cacerts.pem
-    
-    # Initialize hex and build
-    mix local.hex --force
-    mix deps.get --force
-    mix escript.build
+
+              mix escript.build
             '';
             installPhase = ''
               mkdir -p $out/bin
-              mkdir -p $out/${docPath}
               mv ${packageName} $out/bin/${packageName}
             '';
           };
