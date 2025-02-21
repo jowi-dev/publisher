@@ -51,6 +51,9 @@
             packages=basePackages;
             buildInputs = basePackages;
             buildPhase = ''
+                  export SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
+    export NIX_SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
+    export GIT_SSL_CAINFO="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
               ${hooks}
               mix deps.get
               mix escript.build
