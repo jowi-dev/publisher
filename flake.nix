@@ -33,6 +33,8 @@
             export LANG=en_US.UTF-8
             export ERL_AFLAGS="-kernel shell_history enabled"
           '';
+	erl = pkgs.beam.interpreters.erlang_27;
+	erlangPackages = pkgs.beam.packagesWith erl;
         in
         {
           devShells.default = pkgs.mkShell {
@@ -40,7 +42,16 @@
             shellHook = hooks;
           };
 
-          packages.default = pkgs.mixRelease {
+          packages.default =   erlangPackages.mixRelease {
+		version = "0.1.0";
+		src=./.;
+		pname = "emporium";
+		mixFodDeps = erlangPackages.fetchMixDeps {
+		  version = "0.1.0";
+		  src = ./.;
+		  pname = "emporium-deps";
+		  sha256 = "sha256-EeDWBGrd77eRWVwtIGqHvvMKBqm5F78eZ7/MGlQl8Go=";
+		};
 
             postBuild = ''
 
