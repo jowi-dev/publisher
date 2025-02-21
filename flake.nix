@@ -49,6 +49,7 @@
             # run tests?
             doCheck=false;
             packages=basePackages;
+            nativeBuildInputs = with pkgs; [ pkg-config cacert ];
             buildInputs = basePackages;
             buildPhase = ''
                   export SSL_CERT_FILE="${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"
