@@ -17,8 +17,10 @@
             beam.interpreters.elixir
             elixir 
             erlang_27
-            cacert
           ] ++ pkgs.lib.optionals pkgs.stdenv.isLinux [inotify-tools] ;
+
+          erl = pkgs.beam.interpreters.erlang_27;
+          erlangPackages = pkgs.beam.packagesWith erl;
 
             
           hooks = ''
@@ -27,14 +29,11 @@
             export MIX_HOME=$PWD/.nix-mix
             export HEX_HOME=$PWD/.nix-hex
             export PATH=$MIX_HOME/bin:$MIX_HOME/escripts:$HEX_HOME/bin:$PATH
-            export NIX_SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
 
             mix local.hex --if-missing
             export LANG=en_US.UTF-8
             export ERL_AFLAGS="-kernel shell_history enabled"
           '';
-	erl = pkgs.beam.interpreters.erlang_27;
-	erlangPackages = pkgs.beam.packagesWith erl;
         in
         {
           devShells.default = pkgs.mkShell {
@@ -43,19 +42,16 @@
           };
 
           packages.default =   erlangPackages.mixRelease {
-		version = "0.1.0";
-		src=./.;
-		pname = "emporium";
-		mixFodDeps = erlangPackages.fetchMixDeps {
-		  version = "0.1.0";
-		  src = ./.;
-		  pname = "emporium-deps";
-		  sha256 = "sha256-EeDWBGrd77eRWVwtIGqHvvMKBqm5F78eZ7/MGlQl8Go=";
-		};
-
+            version = "0.1.0";
+            src=./.;
+            pname = "emporium";
+            mixFodDeps = erlangPackages.fetchMixDeps {
+              version = "0.1.0";
+              src = ./.;
+              pname = "emporium-deps";
+              sha256 = "sha256-EeDWBGrd77eRWVwtIGqHvvMKBqm5F78eZ7/MGlQl8Go=";
+            };
             postBuild = ''
-
-
               mix escript.build
             '';
             installPhase = ''
